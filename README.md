@@ -18,5 +18,5 @@ FB_Messenger is a ....
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/.../....git
+   git clone https://github.com/.../FB_Messenger.git
    ```
