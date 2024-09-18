@@ -2,7 +2,8 @@ const axios = require('axios')
 require('dotenv').config()
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
-const FB_API_URL = 'https://graph.facebook.com/v11.0/me/messages'
+const API_VERSION = process.env.API_VERSION
+const FB_API_URL = `https://graph.facebook.com/${API_VERSION}/me/messages`
 
 exports.sendTextMessage = async (recipientId, text) => {
   const messageData = {
