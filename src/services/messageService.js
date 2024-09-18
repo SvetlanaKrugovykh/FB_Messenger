@@ -15,9 +15,9 @@ exports.sendTextMessage = async (recipientId, text) => {
     await axios.post(FB_API_URL, messageData, {
       params: { access_token: PAGE_ACCESS_TOKEN },
     })
-    console.log(`Текстовое сообщение отправлено: "${text}" пользователю ${recipientId}`)
+    console.log(`Text message sent: "${text}" to user ${recipientId}`)
   } catch (error) {
-    console.error('Ошибка при отправке текстового сообщения:', error.response ? error.response.data : error.message)
+    console.error('Error while message sending:', error.response ? error.response.data : error.message)
   }
 }
 
@@ -40,8 +40,25 @@ exports.sendButtonMessage = async (recipientId, text, buttons) => {
     await axios.post(FB_API_URL, messageData, {
       params: { access_token: PAGE_ACCESS_TOKEN },
     })
-    console.log(`Сообщение с кнопками отправлено пользователю ${recipientId}`)
+    console.log(`The message with buttons sent ${recipientId}`)
   } catch (error) {
-    console.error('Ошибка при отправке сообщения с кнопками:', error.response ? error.response.data : error.message)
+    console.error('Error sending message with buttons:', error.response ? error.response.data : error.message)
+  }
+}
+
+
+exports.saveFileLocally = async (fileUrl, fileType) => {
+  try {
+    const ATTACHMENTS = process.env.ATTACHMENTS || 'ATTACHMENTS';
+    const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+    const fileName = `${Date.now()}-${fileType}${path.extname(fileUrl)}`;
+    const filePath = path.join(__dirname, ATTACHMENTS, fileName);
+
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+
+    fs.writeFileSync(filePath, response.data);
+    console.log(`File saved locally: ${filePath}`);
+  } catch (error) {
+    console.error('Error saving file locally:', error.message);
   }
 }
