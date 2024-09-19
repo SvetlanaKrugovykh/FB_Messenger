@@ -49,16 +49,24 @@ exports.sendButtonMessage = async (recipientId, text, buttons) => {
 
 exports.saveFileLocally = async (fileUrl, fileType) => {
   try {
-    const ATTACHMENTS = process.env.ATTACHMENTS || 'ATTACHMENTS';
-    const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-    const fileName = `${Date.now()}-${fileType}${path.extname(fileUrl)}`;
-    const filePath = path.join(__dirname, ATTACHMENTS, fileName);
+    const ATTACHMENTS = process.env.ATTACHMENTS || 'ATTACHMENTS'
+    const response = await axios.get(fileUrl, { responseType: 'arraybuffer' })
+    const fileName = `${Date.now()}-${fileType}${path.extname(fileUrl)}`
+    const filePath = path.join(__dirname, ATTACHMENTS, fileName)
 
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.mkdirSync(path.dirname(filePath), { recursive: true })
 
-    fs.writeFileSync(filePath, response.data);
-    console.log(`File saved locally: ${filePath}`);
+    fs.writeFileSync(filePath, response.data)
+    console.log(`File saved locally: ${filePath}`)
   } catch (error) {
-    console.error('Error saving file locally:', error.message);
+    console.error('Error saving file locally:', error.message)
   }
+}
+
+exports.getFileUrl = async (mediaId, accessToken) => {
+  const url = `https://graph.facebook.com/${API_VERSION}/${mediaId}`
+  const response = await axios.get(url, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+  return response.data.url
 }

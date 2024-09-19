@@ -1,4 +1,5 @@
 const webhookHandler = require('../utils/webhookHandler')
+const whatsAppService = require('../services/whatsAppService')
 const { sendTextMessage, saveFileLocally } = require('../services/messageService')
 const { handleQuickReply } = require('./quickReplyHandler')
 require('dotenv').config()
@@ -20,6 +21,7 @@ exports.verifyWebhook = (req, reply) => {
 
 exports.handleMessage = async (req, reply) => {
   const body = req.body
+  console.log('Webhook event received:', body)
 
   if (body.object === 'page') {
     await Promise.all(body.entry.map(async (entry) => {
@@ -40,10 +42,20 @@ exports.handleMessage = async (req, reply) => {
     }))
 
     reply.code(200).send('EVENT_RECEIVED')
+
+  } else if (body.object === 'whatsapp_business_account') {
+    await whatsAppService.getWhatsAppMessages(body)
+    reply.code(200).send('EVENT_RECEIVED')
+
+  } else if (body.object === 'instagram') {
+    await instagramService.getInstagramMessages(body)
+    reply.code(200).send('EVENT_RECEIVED')
+
   } else {
     reply.code(404).send('Not Found')
   }
 }
+
 
 exports.handleIncomingMessage = async (event) => {
   const senderId = event.sender.id
