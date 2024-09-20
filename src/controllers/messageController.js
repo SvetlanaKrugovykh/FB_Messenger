@@ -29,10 +29,13 @@ exports.handleMessage = async (req, reply) => {
       for (let event of messagingEvents) {
         if (event.message) {
           if (event.message.quick_replies) {
+            console.log('Quick reply received:', event.message.quick_replies)
             await exports.handleQuickReply(event)
           } else if (event.message.text) {
+            console.log('Message received:', event.message.text)
             await exports.handleIncomingMessage(event)
           } else if (event.message.attachments) {
+            console.log('Attachment received:', event.message.attachments)
             await exports.handleIncomingAttachment(event)
           }
         } else if (event.postback) {
@@ -44,10 +47,12 @@ exports.handleMessage = async (req, reply) => {
     reply.code(200).send('EVENT_RECEIVED')
 
   } else if (body.object === 'whatsapp_business_account') {
+    console.log('WhatsApp event received:')
     await whatsAppService.getWhatsAppMessages(body)
     reply.code(200).send('EVENT_RECEIVED')
 
   } else if (body.object === 'instagram') {
+    console.log('Instagram event received:')
     await instagramService.getInstagramMessages(body)
     reply.code(200).send('EVENT_RECEIVED')
 
