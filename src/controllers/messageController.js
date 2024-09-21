@@ -22,7 +22,7 @@ exports.verifyWebhook = (req, reply) => {
 
 exports.handleMessage = async (req, reply) => {
   const body = req.body
-  console.log('Webhook event received:', body)
+  console.log('Webhook event received:', JSON.stringify(body, null, 2))
 
   if (body.object === 'page') {
     await Promise.all(body.entry.map(async (entry) => {
