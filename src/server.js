@@ -2,8 +2,9 @@
 require('dotenv').config()
 const { app } = require('./index')
 const HOST = process.env.HOST || '127.0.0.1'
+const PORT = Number(process.env.PORT) || 8080
 
-app.listen({ port: process.env.PORT || 8080, host: HOST }, (err, address) => {
+app.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
     app.log.error(err)
     process.exit(1)
