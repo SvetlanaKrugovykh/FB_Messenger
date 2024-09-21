@@ -2,7 +2,7 @@
 require('dotenv').config()
 const { app } = require('./index')
 const HOST = process.env.HOST || '127.0.0.1'
-const PORT = Number(process.env.PORT) || 8080
+const PORT = Number(process.env.PORT) || 9579
 
 app.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
