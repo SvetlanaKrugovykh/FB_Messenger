@@ -13,22 +13,11 @@ exports.verifyWebhook = (req, reply) => {
 
   if (mode && token === VERIFY_TOKEN) {
     console.log('Webhook verified successfully')
+    reply.code(200).send(challenge)
     reply.type('text/plain').send(challenge)
   } else {
     console.log('Verification failed')
-    reply.type('text/html').send(`
-      <html>
-        <head>
-          <meta property="og:url" content="https://gate.silver-service.com.ua/webhook" />
-          <meta property="og:title" content="Webhook Service" />
-          <meta property="og:description" content="This is a webhook endpoint for Facebook/Instagram/WhatsApp integrations." />
-          <meta property="og:image" content="https://gate.silver-service.com.ua/path-to-your-image.jpg" />
-        </head>
-        <body>
-          <h1>Webhook Verification</h1>
-        </body>
-      </html>
-    `)
+    reply.code(403).send('Verification failed')
   }
 }
 
