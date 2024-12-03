@@ -25,7 +25,14 @@ exports.handleMessage = async (req, reply) => {
   const body = req.body
   console.log('Webhook event received:', JSON.stringify(body, null, 2))
 
-  if (body.object === 'page') {
+  if (body.object === 'whatsapp') {
+    if (body.entry && body.entry[0].changes[0].value.messages) {
+      const messages = body.entry[0].changes[0].value.messages
+      messages.forEach(message => {
+        console.log('Received message: ', message)
+      })
+    }
+  } else if (body.object === 'page') {
     await Promise.all(body.entry.map(async (entry) => {
       const messagingEvents = entry.messaging
       for (let event of messagingEvents) {
