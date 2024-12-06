@@ -31,7 +31,8 @@ exports.verifyWebhook = (req, reply) => {
 
 exports.handleMessage = async (req, reply) => {
   const body = req.body
-  if (DEBUG_LEVEL > 0) console.log('Webhook event received:', JSON.stringify(body, null, 2))
+  //if (DEBUG_LEVEL > 0) 
+  console.log('Webhook event received:', JSON.stringify(body, null, 2))
   const who = {
     sender_id: body.entry[0].messaging[0].sender.id,
     recipient_id: body.entry[0].messaging[0].recipient.id
