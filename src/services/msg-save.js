@@ -44,7 +44,8 @@ module.exports.handleAttachment = async function (platform, who, attachment, mes
     TOKEN = process.env.INSTAGRAM_TOKEN
   }
   const url = attachment.payload.url
-  const uniqueFilename = `${uuidv4()}${path.extname(url)}`
+  const fileExtension = path.extname(url.split('?')[0])
+  const uniqueFilename = `${uuidv4()}${fileExtension}`
   const filepath = path.join(DOWNLOAD_APP_PATH, uniqueFilename)
   try {
     const response = await axios.get(url, {
