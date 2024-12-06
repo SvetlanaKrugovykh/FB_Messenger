@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'facebook-bot-app',
-      script: './src/server/server.js',
+      script: './src/server.js',
       watch: true,
       env: {
         NODE_ENV: 'development',
