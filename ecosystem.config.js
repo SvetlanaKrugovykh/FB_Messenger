@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'facebook-bot-app',
+      name: 'FB-messenger',
       script: './src/server.js',
       watch: true,
       env: {
