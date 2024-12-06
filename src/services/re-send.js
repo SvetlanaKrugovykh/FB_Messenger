@@ -1,7 +1,7 @@
 const axios = require('axios')
 const FormData = require('form-data')
 const fs = require('fs')
-const path = require('path');
+const path = require('path')
 require('dotenv').config()
 const apiToken = process.env.TELEGRAM_BOT_TOKEN
 const GROUP_ID = process.env.GROUP_ID
@@ -62,18 +62,17 @@ module.exports.sendTelegram = async function (tg_chat_id, fileName) {
   }
 }
 
-module.exports.sendTxtMsgToTelegram = async function (message) {
+module.exports.sendTxtMsgToTelegram = async function (message, platform, sender_id) {
 
   try {
     await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       chat_id: GROUP_ID,
-      text: message,
-    })
+      text: `platform: ${platform}\nsender_id: ${sender_id}\nmessage: ${message}\n`,
+    }, { parse_mode: "HTML" })
     console.log('Message sent successfully')
     return true
   } catch (error) {
     console.error('Error sending Telegram message:', error.message)
     return false
   }
-
 }

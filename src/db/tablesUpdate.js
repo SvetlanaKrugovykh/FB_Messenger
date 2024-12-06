@@ -21,7 +21,7 @@ const tableQueries = {
       sender_id VARCHAR(50) NOT NULL,
       recipient_id VARCHAR(50) NOT NULL,
       received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      message_id VARCHAR(100) NOT NULL,
+      message_id VARCHAR(255) NOT NULL,
       message_text TEXT,
       message_type VARCHAR(50),
       attachment_type VARCHAR(50),
