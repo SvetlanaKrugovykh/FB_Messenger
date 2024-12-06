@@ -1,7 +1,7 @@
 const axios = require('axios')
 require('dotenv').config()
 
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
+const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN
 const API_VERSION = process.env.API_VERSION
 const FB_API_URL = `https://graph.facebook.com/${API_VERSION}/me/messages`
 
@@ -13,7 +13,7 @@ exports.sendTextMessage = async (recipientId, text) => {
 
   try {
     await axios.post(FB_API_URL, messageData, {
-      params: { access_token: PAGE_ACCESS_TOKEN },
+      params: { access_token: FB_PAGE_ACCESS_TOKEN },
     })
     console.log(`Text message sent: "${text}" to user ${recipientId}`)
   } catch (error) {
@@ -38,7 +38,7 @@ exports.sendButtonMessage = async (recipientId, text, buttons) => {
 
   try {
     await axios.post(FB_API_URL, messageData, {
-      params: { access_token: PAGE_ACCESS_TOKEN },
+      params: { access_token: FB_PAGE_ACCESS_TOKEN },
     })
     console.log(`The message with buttons sent ${recipientId}`)
   } catch (error) {

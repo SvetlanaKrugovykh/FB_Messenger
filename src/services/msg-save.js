@@ -4,6 +4,7 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const { insertMessage } = require('../db/requests')
 const { sendTelegram, sendTxtMsgToTelegram } = require('../services/re-send')
+require('dotenv').config()
 
 const DOWNLOAD_APP_PATH = process.env.DOWNLOAD_APP_PATH
 const DEBUG_LEVEL = Number(process.env.DEBUG_LEVEL) || 0
@@ -35,12 +36,23 @@ module.exports.saveMessage = async function (platform, who, message, messageType
   }
 }
 
-module.exports.handleAttachment = async function (platform, attachment, message) {
+module.exports.handleAttachment = async function (platform, who, attachment, message) {
+  let TOKEN = process.env.FB_PAGE_ACCESS_TOKEN
+  if (platform === 'whatsapp') {
+    TOKEN = process.env.WHATSAPP_TOKEN
+  } else if (platform === 'Instagram') {
+    TOKEN = process.env.INSTAGRAM_TOKEN
+  }
   const url = attachment.payload.url
   const uniqueFilename = `${uuidv4()}${path.extname(url)}`
   const filepath = path.join(DOWNLOAD_APP_PATH, uniqueFilename)
   try {
-    const response = await axios.get(url, { responseType: 'stream' })
+    const response = await axios.get(url, {
+      responseType: 'stream',
+      headers: {
+        'Authorization': `Bearer ${TOKEN}`
+      }
+    })
     await new Promise((resolve, reject) => {
       const writer = fs.createWriteStream(filepath)
       response.data.pipe(writer)
@@ -48,8 +60,8 @@ module.exports.handleAttachment = async function (platform, attachment, message)
       writer.on('error', reject)
     })
     if (DEBUG_LEVEL > 0) console.log(`Attachment saved: ${filepath}`)
-    await saveMessage(platform, who, message, 'attachment', attachment.type, url, uniqueFilename)
-    await sendTelegram(process.env.TELEGRAM_CHAT_ID, filepath)
+    await module.exports.saveMessage(platform, who, message, 'attachment', attachment.type, url, uniqueFilename)
+    await sendTelegram(filepath, platform, who.sender_id)
   } catch (error) {
     if (DEBUG_LEVEL > 0) console.error(`Failed to download attachment: ${error.message}`)
   }

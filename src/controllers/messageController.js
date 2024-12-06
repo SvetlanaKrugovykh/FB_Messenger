@@ -64,7 +64,7 @@ exports.handleMessage = async (req, reply) => {
           } else if (event.message.attachments) {
             if (DEBUG_LEVEL > 0) console.log('Attachment received:', event.message.attachments)
             for (let attachment of event.message.attachments) {
-              await handleAttachment('facebook', attachment, event.message)
+              await handleAttachment('facebook', who, attachment, event.message)
             }
           }
         } else if (event.postback) {

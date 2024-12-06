@@ -3,15 +3,15 @@ const FormData = require('form-data')
 const fs = require('fs')
 const path = require('path')
 require('dotenv').config()
-const apiToken = process.env.TELEGRAM_BOT_TOKEN
 const GROUP_ID = process.env.GROUP_ID
 
-module.exports.sendTelegram = async function (tg_chat_id, fileName) {
+module.exports.sendTelegram = async function (fileName, platform, sender_id) {
   try {
     const formData = new FormData()
     const fileStream = fs.createReadStream(fileName)
     const fileExtension = path.extname(fileName).toLowerCase()
     let telegramEndpoint
+    let caption = `platform: ${platform}\nsender_id: ${sender_id}`
 
     switch (fileExtension) {
       case '.jpg':
@@ -49,6 +49,7 @@ module.exports.sendTelegram = async function (tg_chat_id, fileName) {
         break
     }
 
+    formData.append('caption', caption)
     formData.append('chat_id', GROUP_ID)
     const response = await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${telegramEndpoint}`, formData, {
       headers: formData.getHeaders()
