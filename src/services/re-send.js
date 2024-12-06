@@ -54,8 +54,8 @@ module.exports.sendTelegram = async function (fileName, platform, sender_id) {
     const response = await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/${telegramEndpoint}`, formData, {
       headers: formData.getHeaders()
     })
-
     console.log(response.data)
+    await module.exports.sendButtonsToTelegram(platform, sender_id)
     return true
   } catch (error) {
     console.error(error)
@@ -70,6 +70,30 @@ module.exports.sendTxtMsgToTelegram = async function (message, platform, sender_
       chat_id: GROUP_ID,
       text: `platform: ${platform}\nsender_id: ${sender_id}\nmessage: ${message}\n`,
     }, { parse_mode: "HTML" })
+    console.log('Message sent successfully')
+    await module.exports.sendButtonsToTelegram(platform, sender_id)
+    return true
+  } catch (error) {
+    console.error('Error sending Telegram message:', error.message)
+    return false
+  }
+}
+
+
+module.exports.sendButtonsToTelegram = async function (platform, sender_id) {
+  try {
+    await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      chat_id: GROUP_ID,
+      text: 'Select action:',
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{
+            text: `✅ platform: ${platform}\nsender_id: ${sender_id}`, callback_data: 'reply'
+          }],
+          [{ text: `❌ platform: ${platform}\nsender_id: ${sender_id}`, callback_data: 'decline' }],
+        ],
+      }),
+    })
     console.log('Message sent successfully')
     return true
   } catch (error) {
