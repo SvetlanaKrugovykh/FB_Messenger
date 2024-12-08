@@ -6,10 +6,11 @@ exports.handleQuickReply = async (event) => {
   const quickReply = event.message.quick_reply
   const payload = quickReply.payload
   const platform = 'facebook'
+  const text = `📌${event.message.text}`
 
   console.log('Postback received:', payload)
   await sendMessage(senderId, `✅ ${payload}`)
-  await sendTxtMsgToTelegram(quickReply, platform, senderId)
+  await sendTxtMsgToTelegram(text, platform, senderId)
 }
 
 async function sendMessage(recipientId, text) {
