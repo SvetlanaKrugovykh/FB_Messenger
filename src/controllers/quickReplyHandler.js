@@ -1,4 +1,5 @@
 const axios = require('axios')
+require('dotenv').config()
 const { sendTxtMsgToTelegram } = require('../services/re-send')
 
 
@@ -16,8 +17,8 @@ exports.handleQuickReply = async (event) => {
 }
 
 async function sendMessage(recipientId, text) {
-  const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-  const url = `https://graph.facebook.com/${process.env.API_VERSION}/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
+  const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN
+  const url = `https://graph.facebook.com/${process.env.API_VERSION}/me/messages?access_token=${PAGE_ACCESS_TOKEN}`
 
   const messageData = {
     recipient: {
@@ -26,14 +27,14 @@ async function sendMessage(recipientId, text) {
     message: {
       text: text,
     },
-  };
+  }
 
   try {
     const response = await axios.post(url, messageData, {
       headers: { 'Content-Type': 'application/json' },
-    });
-    console.log('Message sent:', response.data);
+    })
+    console.log('Message sent:', response.data)
   } catch (error) {
-    console.error('Error sending message:', error.response ? error.response.data : error.message);
+    console.error('Error sending message:', error.response ? error.response.data : error.message)
   }
 }
