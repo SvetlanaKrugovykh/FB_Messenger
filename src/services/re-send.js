@@ -71,7 +71,7 @@ module.exports.sendTxtMsgToTelegram = async function (message, platform, sender_
       text: `platform: ${platform}\nsender_id: ${sender_id}\nmessage: ${message}\n`,
     }, { parse_mode: "HTML" })
     console.log('Message sent successfully')
-    await module.exports.sendButtonsToTelegram(platform, sender_id)
+    await module.exports.sendButtonsToTelegram(message, platform, sender_id)
     return true
   } catch (error) {
     console.error('Error sending Telegram message:', error.message)
@@ -80,11 +80,11 @@ module.exports.sendTxtMsgToTelegram = async function (message, platform, sender_
 }
 
 
-module.exports.sendButtonsToTelegram = async function (platform, sender_id) {
+module.exports.sendButtonsToTelegram = async function (message, platform, sender_id) {
   try {
     await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       chat_id: GROUP_ID,
-      text: 'Select action:',
+      text: message,
       reply_markup: JSON.stringify({
         inline_keyboard: [
           [{
