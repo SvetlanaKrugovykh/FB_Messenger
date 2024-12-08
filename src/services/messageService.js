@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const FACEBOOK_PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN
 const API_VERSION = process.env.API_VERSION
-const FB_API_URL = `https://graph.facebook.com/${API_VERSION}/me/messages`
+const FB_API_URL = `https://graph.facebook.com/${process.env.API_VERSION}/me/messages?access_token=${process.env.FACEBOOK_PAGE_ACCESS_TOKEN}`
 
 exports.sendTextMessage = async (recipientId, text) => {
   const messageData = {
@@ -12,9 +12,8 @@ exports.sendTextMessage = async (recipientId, text) => {
   }
 
   try {
-    await axios.post(FB_API_URL, messageData, {
-      params: { access_token: FACEBOOK_PAGE_ACCESS_TOKEN },
-    })
+    console.log('sendTextMessage', FB_API_URL)
+    await axios.post(FB_API_URL, messageData)
     console.log(`Text message sent: "${text}" to user ${recipientId}`)
   } catch (error) {
     console.error('Error while message sending:', error.response ? error.response.data : error.message)
@@ -37,9 +36,8 @@ exports.sendButtonMessage = async (recipientId, text, buttons) => {
   }
 
   try {
-    await axios.post(FB_API_URL, messageData, {
-      params: { access_token: FACEBOOK_PAGE_ACCESS_TOKEN },
-    })
+    console.log('sendButtonMessage', FB_API_URL)
+    await axios.post(FB_API_URL, messageData)
     console.log(`The message with buttons sent ${recipientId}`)
   } catch (error) {
     console.error('Error sending message with buttons:', error.response ? error.response.data : error.message)

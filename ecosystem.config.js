@@ -29,6 +29,7 @@ module.exports = {
         APP_NAME: process.env.APP_NAME,
         APP_ACCESS_TOKEN: process.env.APP_ACCESS_TOKEN,
         FACEBOOK_PAGE_ACCESS_TOKEN: process.env.FACEBOOK_PAGE_ACCESS_TOKEN,
+        INSTAGRAM_ACCESS_TOKEN: process.env.INSTAGRAM_ACCESS_TOKEN,
       },
       env_production: {
         NODE_ENV: 'production',
@@ -52,6 +53,7 @@ module.exports = {
         APP_NAME: process.env.APP_NAME,
         APP_ACCESS_TOKEN: process.env.APP_ACCESS_TOKEN,
         FACEBOOK_PAGE_ACCESS_TOKEN: process.env.FACEBOOK_PAGE_ACCESS_TOKEN,
+        INSTAGRAM_ACCESS_TOKEN: process.env.INSTAGRAM_ACCESS_TOKEN,
       },
     },
   ],
