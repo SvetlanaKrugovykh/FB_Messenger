@@ -1,4 +1,3 @@
-const axios = require('axios')
 const { saveMessage, handleAttachment } = require('../services/msg-save')
 
 exports.getInstagramMessages = async function (body, who) {
