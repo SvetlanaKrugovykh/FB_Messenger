@@ -1,27 +1,36 @@
-const { sendTextMessage } = require('../services/messageService')
+const { sendTxtMsgToTelegram } = require('../services/re-send')
+
 
 exports.handleQuickReply = async (event) => {
   const senderId = event.sender.id
-  const quickReplies = event.message.quick_replies
+  const quickReply = event.message.quick_reply
+  const payload = quickReply.payload
+  const platform = 'facebook'
 
-  for (let quickReply of quickReplies) {
-    await exports.handleQuickReplyPayload(senderId, quickReply.payload)
-    console.log(`Quick reply received from ${senderId}: ${quickReply.payload}`)
-
-    switch (quickReply) {
-      case 'PAYLOAD_OPTION_1':
-        await sendTextMessage(senderId, 'You selected option 1')
-        break
-      case 'PAYLOAD_OPTION_2':
-        await sendTextMessage(senderId, 'You selected option 2')
-        break
-      default:
-        await sendTextMessage(senderId, `Unknown quick reply payload: ${quickReply.payload}`)
-        break
-    }
-  }
+  console.log('Postback received:', payload)
+  await sendMessage(senderId, `✅ ${payload}`)
+  await sendTxtMsgToTelegram(quickReply, platform, senderId)
 }
 
-exports.handleQuickReplyPayload = async (senderId, payload) => {
-  console.log(`Handling quick reply payload: ${payload}`)
+async function sendMessage(recipientId, text) {
+  const PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+  const url = `https://graph.facebook.com/${process.env.API_VERSION}/me/messages?access_token=${PAGE_ACCESS_TOKEN}`;
+
+  const messageData = {
+    recipient: {
+      id: recipientId,
+    },
+    message: {
+      text: text,
+    },
+  };
+
+  try {
+    const response = await axios.post(url, messageData, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log('Message sent:', response.data);
+  } catch (error) {
+    console.error('Error sending message:', error.response ? error.response.data : error.message);
+  }
 }

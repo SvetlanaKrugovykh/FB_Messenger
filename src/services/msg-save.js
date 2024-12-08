@@ -37,7 +37,7 @@ module.exports.saveMessage = async function (platform, who, message, messageType
 }
 
 module.exports.handleAttachment = async function (platform, who, attachment, message) {
-  let TOKEN = process.env.FB_PAGE_ACCESS_TOKEN
+  let TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN
   if (platform === 'whatsapp') {
     TOKEN = process.env.WHATSAPP_TOKEN
   } else if (platform === 'Instagram') {
