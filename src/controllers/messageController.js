@@ -62,7 +62,7 @@ exports.handleMessage = async (req, reply) => {
         for (let message of messages) {
           if (DEBUG_LEVEL > 0) console.log('Received message: ', message)
           if (message.type !== 'text') {
-            await handleAttachment('whatsapp', message)
+            await handleAttachment('whatsapp', who, message[message.type], message)
           } else {
             await saveMessage('whatsapp', who, message, 'text')
           }

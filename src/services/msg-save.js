@@ -48,14 +48,30 @@ module.exports.saveMessage = async function (platform, who, message, messageType
 module.exports.handleAttachment = async function (platform, who, attachment, message) {
   let TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN
   if (platform === 'whatsapp') {
-    TOKEN = process.env.WHATSAPP_TOKEN
+    TOKEN = process.env.WHATSAPP_ACCESS_TOKEN
   } else if (platform === 'Instagram') {
     TOKEN = process.env.INSTAGRAM_TOKEN
   }
-  const url = attachment.payload.url
+
+  let url
+  if (platform === 'whatsapp') {
+    const attachmentId = attachment.id
+    try {
+      const response = await axios.get(`https://graph.facebook.com/${process.env.API_VERSION}/${attachmentId}?access_token=${TOKEN}`, {
+      })
+      url = response.data.url
+    } catch (error) {
+      console.error(`Failed to get attachment URL: ${error.message}`)
+      return
+    }
+  } else {
+    url = attachment.payload.url
+  }
+
   const fileExtension = path.extname(url.split('?')[0])
   const uniqueFilename = `${uuidv4()}${fileExtension}`
   const filepath = path.join(DOWNLOAD_APP_PATH, uniqueFilename)
+
   try {
     const response = await axios.get(url, {
       responseType: 'stream',
@@ -63,6 +79,7 @@ module.exports.handleAttachment = async function (platform, who, attachment, mes
         'Authorization': `Bearer ${TOKEN}`
       }
     })
+
     await new Promise((resolve, reject) => {
       const writer = fs.createWriteStream(filepath)
       response.data.pipe(writer)
