@@ -10,12 +10,21 @@ const DOWNLOAD_APP_PATH = process.env.DOWNLOAD_APP_PATH
 const DEBUG_LEVEL = Number(process.env.DEBUG_LEVEL) || 0
 
 module.exports.saveMessage = async function (platform, who, message, messageType, attachmentType = null, attachmentUrl = null, attachmentFilename = null) {
+
+  let messageId
+
+  if (platform === 'whatsapp') {
+    messageId = message.id
+  } else {
+    messageId = message.mid
+  }
+
   const data = {
     platform,
     sender_id: who.sender_id,
     recipient_id: who.recipient_id,
     received_at: new Date(),
-    message_id: message.mid,
+    message_id: messageId,
     message_text: message.text || null,
     message_type: messageType,
     attachment_type: attachmentType,

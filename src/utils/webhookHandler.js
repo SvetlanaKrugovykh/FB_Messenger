@@ -10,7 +10,7 @@ exports.processEvent = async (event) => {
       const userMessage = event?.postback?.title
       const text = `📌${event.postback.payload}`
       await botService.sendTextMessage(senderId, userMessage)
-      await sendTxtMsgToTelegram(text, platform, senderId)
+      // await sendTxtMsgToTelegram(text, platform, senderId) //TODO: another algorithm with db
     }
   } catch (error) {
     console.error('Error processing event:', error)
